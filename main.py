@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from typing import Optional
 
 app = FastAPI()
 
@@ -15,9 +16,11 @@ def about():
 
 @app.get('/blog/{id}')
 def get_post(id : int):
+    
     return ({'data':{'message':f'your path param is {id}'}})
 
 @app.get('/test')
-def method_name(limit: int = 10):
-
+def method_name(limit: int = 10, sort : Optional[str] = None):
+    if sort:
+        return ({'message': f'your sort is {sort}'})
     return({'message': f'your limit is {limit}'})
