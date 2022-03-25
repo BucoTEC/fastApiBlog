@@ -16,3 +16,8 @@ def about():
 @app.get('/blog/{id}')
 def get_post(id : int):
     return ({'data':{'message':f'your path param is {id}'}})
+
+@app.get('/test')
+def method_name(limit: int):
+
+    return({'message': f'your limit is {limit}'})
