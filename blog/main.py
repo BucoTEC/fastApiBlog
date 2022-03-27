@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from . import schemas
+from . import models, db
 
+models.Base.metadata.create_all(db.engine)
 app = FastAPI()
 
 
