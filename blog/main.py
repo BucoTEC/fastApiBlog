@@ -1,7 +1,7 @@
+from typing import List
 from fastapi import Depends, FastAPI, status, HTTPException
 from sqlalchemy.orm import Session
-from . import schemas
-from . import models
+from . import schemas, models
 from .db import engine, SessionLocal
 
 models.Base.metadata.create_all(engine)
@@ -22,12 +22,12 @@ def create( req : schemas.Blog, db : Session = Depends(get_db)):
     db.refresh(new_blog)
     return new_blog
 
-@app.get('/blog')
+@app.get('/blog', response_model=List[schemas.ShowBlog])
 def all(db : Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
-@app.get('/blog/{id}', status_code=200)
+@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog)
 def  show(id : int, db : Session = Depends(get_db)):
     blog = db.query(models.Blog).where(models.Blog.id == id).first()
     if not blog:
