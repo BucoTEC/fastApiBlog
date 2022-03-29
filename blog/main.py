@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from . import schemas, models
 from .db import engine, SessionLocal
 
-models.Base.metadata.create_all(engine)
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 def get_db():
@@ -53,4 +54,25 @@ def  update(id : int, req : schemas.Blog, db : Session = Depends(get_db)):
     blog.update(dict(req))
     db.commit()
     return 'successful update'
+
+
+
+# user routes 
+
+# @app.post('/user')
+# def create_user(req: schemas.User, db : Session = Depends(get_db) ):
+#     new_user = models.User(name=req.name,email=req.email,password=req.password)
+#     db.add(new_user)
+#     db.commit()
+#     db.refresh(new_user)
+#     print(models.User)
+#     return new_user
+
+@app.post('/user', status_code=status.HTTP_201_CREATED)
+def create_user( req : schemas.User, db : Session = Depends(get_db)):
+    new_user =  models.User(name=req.name, email=req.email, password=req.password )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
 
