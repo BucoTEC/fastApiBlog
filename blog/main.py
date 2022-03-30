@@ -76,3 +76,8 @@ def create_user( req : schemas.User, db : Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+@app.get('/users', status_code=200)
+def all_users(db:Session = Depends(get_db)):
+    all_users = db.query(models.User).all()
+    return all_users
+
