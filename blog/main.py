@@ -75,3 +75,8 @@ def all_users(db:Session = Depends(get_db)):
     all_users = db.query(models.User).all()
     return all_users
 
+@app.get('/users{id}', status_code=200, response_model=schemas.ShowUser)
+def all_users(id: int, db:Session = Depends(get_db)):
+    user = db.query(models.User).where(models.User.id == id).first()
+    return user
+
