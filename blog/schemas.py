@@ -1,3 +1,4 @@
+import email
 from pydantic import BaseModel
 
 
@@ -21,3 +22,8 @@ class ShowUser(BaseModel):
 
     class Config():
         orm_mode = True
+
+
+class Login(BaseModel):
+    email: str
+    password: str
