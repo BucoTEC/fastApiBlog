@@ -73,10 +73,14 @@ def create_user( req : schemas.User, db : Session = Depends(get_db)):
 @app.get('/users', status_code=200, response_model=List[schemas.ShowUser])
 def all_users(db:Session = Depends(get_db)):
     all_users = db.query(models.User).all()
+    if all_users.len < 1:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'No users curently in db')
     return all_users
 
 @app.get('/users{id}', status_code=200, response_model=schemas.ShowUser)
 def all_users(id: int, db:Session = Depends(get_db)):
     user = db.query(models.User).where(models.User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'user of id:{id} not found')
     return user
 
