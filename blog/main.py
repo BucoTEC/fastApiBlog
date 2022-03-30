@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, status, HTTPException
 from sqlalchemy.orm import Session
 from . import schemas, models
 from .db import engine, SessionLocal
-from passlib.context import CryptContext
+from .hashing import hash_password
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -61,18 +61,16 @@ def  update(id : int, req : schemas.Blog, db : Session = Depends(get_db)):
 # user routes 
 
 
-pwd_context  = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 @app.post('/user', status_code=status.HTTP_201_CREATED)
 def create_user( req : schemas.User, db : Session = Depends(get_db)):
-    hash_password = pwd_context.hash(req.password)
-    new_user =  models.User(name=req.name, email=req.email, password=hash_password )
+    new_user =  models.User(name=req.name, email=req.email, password=hash_password(req.password) )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
-@app.get('/users', status_code=200)
+@app.get('/users', status_code=200, response_model=List[schemas.ShowUser])
 def all_users(db:Session = Depends(get_db)):
     all_users = db.query(models.User).all()
     return all_users
