@@ -8,6 +8,7 @@ fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 tk = "*"
+passlib = "*"
 
 [dev-packages]
 
