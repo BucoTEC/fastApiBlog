@@ -1,5 +1,5 @@
-import email
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Blog(BaseModel):
@@ -27,3 +27,12 @@ class ShowUser(BaseModel):
 class Login(BaseModel):
     email: str
     password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+
